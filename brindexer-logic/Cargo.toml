@@ -15,6 +15,11 @@ sea-orm = { version = "1.0.1", features = [
     "macros",
     "postgres-array",
 ] }
+tokio-cron-scheduler = { version = "0.13.0", features = ["english", "english-to-cron", "signal"] }
+async-trait = "0.1.83"
+thiserror = "1.0.64"
+derive-new = "0.7.0"
+tokio = "1.40.0"
 
 
 ## Uncomment this if needed
