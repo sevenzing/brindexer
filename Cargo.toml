@@ -1,0 +1,10 @@
+[workspace]
+resolver = "2"
+members = [
+    "brindexer-logic",
+    "brindexer-proto",
+    "brindexer-server",
+]
+
+[workspace.dependencies]
+blockscout-service-launcher = "0.14.0"
