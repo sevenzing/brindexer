@@ -34,8 +34,9 @@ stop-test-postgres:
 
 run:
     BRINDEXER__DATABASE__CONNECT__URL={{DATABASE_URL}} \
-    cargo run --bin brindexer-server
+    cargo run --bin server
 
-
+init-pg:
+    cargo run --bin initialize_pg
 
 
