@@ -1,6 +1,8 @@
-mod client;
-mod contracts;
 mod abi;
+mod batch;
+mod client;
+pub mod constants;
+mod error;
 
-pub use client::{RpcClient, HttpProvider};
-
+pub use client::{HttpProvider, RpcClient};
+pub use error::Error;

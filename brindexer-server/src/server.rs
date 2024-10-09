@@ -34,7 +34,9 @@ pub async fn run(settings: Settings) -> Result<(), anyhow::Error> {
 
     let health = Arc::new(HealthService::default());
 
-    let create_database_options = ConnectOptions::new(settings.database.connect.url()).sqlx_logging(false).to_owned();
+    let create_database_options = ConnectOptions::new(settings.database.connect.url())
+        .sqlx_logging(false)
+        .to_owned();
     let db = Database::connect(create_database_options).await?;
     let db = Arc::new(db);
 

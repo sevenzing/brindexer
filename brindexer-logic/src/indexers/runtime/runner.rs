@@ -1,10 +1,10 @@
+use super::{IndexerJob, IndexerJobContext};
+use crate::indexers::token::TokenDataJob;
 use derive_new::new;
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
 use tokio::sync::Mutex;
 use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
-use crate::indexers::token::TokenDataJob;
-use super::{IndexerJob, IndexerJobContext};
 
 #[derive(new)]
 pub struct IndexerRuntime {

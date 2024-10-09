@@ -21,6 +21,15 @@ actix = { workspace = true }
 url = { workspace = true }
 alloy-json-rpc = { workspace = true }
 serde_json = { workspace = true }
+alloy-primitives = { workspace = true }
+alloy-consensus = { workspace = true }
+alloy-rpc-client = { workspace = true }
+alloy-eips = { workspace = true }
+alloy-rpc-types = { workspace = true }
+hex = { workspace = true }
+serde = { workspace = true }
+enum_dispatch = { workspace = true }
+
 
 [dev-dependencies]
 blockscout-service-launcher = { workspace = true, features = [ 
@@ -28,4 +37,6 @@ blockscout-service-launcher = { workspace = true, features = [
     
 ] }
 pretty_assertions = { workspace = true }
+rstest = { workspace = true }
+
 

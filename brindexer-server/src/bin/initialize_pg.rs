@@ -1,6 +1,5 @@
 use sea_orm::ConnectOptions;
 
-
 #[tokio::main]
 async fn main() -> Result<(), anyhow::Error> {
     let connect_url = std::env::var("DATABASE_URL").expect("DATABASE_URL is not set");
