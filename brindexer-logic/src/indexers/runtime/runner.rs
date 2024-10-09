@@ -1,5 +1,5 @@
 use super::{IndexerJob, IndexerJobContext};
-use crate::indexers::token::TokenDataJob;
+use crate::{indexers::token::TokenDataJob, rpc::RpcClient};
 use derive_new::new;
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
@@ -10,22 +10,26 @@ use tokio_cron_scheduler::{Job, JobScheduler, JobSchedulerError};
 pub struct IndexerRuntime {
     scheduler: JobScheduler,
     db: Arc<DatabaseConnection>,
+    rpc: Arc<RpcClient>,
 }
 
 impl IndexerRuntime {
-    pub async fn init(db: Arc<DatabaseConnection>) -> Result<Self, anyhow::Error> {
+    pub async fn init(
+        db: Arc<DatabaseConnection>,
+        rpc: Arc<RpcClient>,
+    ) -> Result<Self, anyhow::Error> {
         let scheduler = JobScheduler::new().await?;
-        Ok(Self::new(scheduler, db))
+        Ok(Self::new(scheduler, db, rpc))
     }
 
     pub async fn add_job(&self, job: Arc<dyn IndexerJob>) -> Result<(), JobSchedulerError> {
         let schedule = job.schedule();
         let db = self.db.clone();
+        let rpc = self.rpc.clone();
         let mutex = Arc::new(Mutex::new(false));
         let job = Job::new_async(schedule, move |uuid, mut _l| {
-            let db = db.clone();
             let job = job.clone();
-            let mut ctx = IndexerJobContext::from_db(db.clone());
+            let mut ctx = IndexerJobContext::from_db_rpc(db.clone(), rpc.clone());
             let mutex = mutex.clone();
             Box::pin(async move {
                 tracing::debug!("uuid: {}", uuid);
@@ -60,7 +64,7 @@ impl IndexerRuntime {
     }
 
     pub async fn add_all_jobs(&self) -> Result<(), JobSchedulerError> {
-        let jobs = vec![Arc::new(TokenDataJob::new()) as Arc<dyn IndexerJob>];
+        let jobs = vec![Arc::new(TokenDataJob::new(50)) as Arc<dyn IndexerJob>];
         self.add_jobs(jobs).await
     }
 

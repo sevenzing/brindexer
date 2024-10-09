@@ -1,4 +1,4 @@
-use super::{Error, RpcClient};
+use super::{RpcClient, RpcClientError};
 use crate::rpc::constants;
 use alloy::{providers::Provider, rpc::client::BatchRequest, sol_types::SolCall};
 use alloy_primitives::Address;
@@ -17,7 +17,7 @@ impl RpcClient {
     pub async fn batch<C>(
         &self,
         contracts_and_methods: Vec<(Address, C)>,
-    ) -> Result<Vec<Result<C::Return, Error>>, Error>
+    ) -> Result<Vec<Result<C::Return, RpcClientError>>, RpcClientError>
     where
         C: SolCall,
     {
@@ -36,7 +36,7 @@ impl RpcClient {
 
                 Ok(waiter)
             })
-            .collect::<Result<Vec<_>, Error>>()?;
+            .collect::<Result<Vec<_>, RpcClientError>>()?;
 
         batch.send().await?;
 
@@ -44,15 +44,15 @@ impl RpcClient {
             .await
             .into_iter()
             .map(|r| {
-                r.map_err(Error::Rpc)
+                r.map_err(RpcClientError::Rpc)
                     .and_then(|s| {
                         blockscout_display_bytes::Bytes::from_str(&s).map_err(|e| {
-                            Error::Internal(anyhow::anyhow!("hex decode error: {}", e))
+                            RpcClientError::Internal(anyhow::anyhow!("hex decode error: {}", e))
                         })
                     })
                     .and_then(|s| {
                         C::abi_decode_returns(&s, true).map_err(|e| {
-                            Error::Internal(anyhow::anyhow!("abi decode error: {}", e))
+                            RpcClientError::Internal(anyhow::anyhow!("abi decode error: {}", e))
                         })
                     })
             })
@@ -85,7 +85,7 @@ mod tests {
         ]
     )]
     async fn test_batch(#[case] addresses: &[&str], #[case] expected: &[&str]) {
-        let client = RpcClient::new(DEFAULT_RPC.parse().unwrap());
+        let client = RpcClient::from_url(DEFAULT_RPC.parse().unwrap());
         let results = client
             .batch(
                 addresses

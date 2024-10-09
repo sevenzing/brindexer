@@ -4,7 +4,7 @@ use crate::{
     settings::Settings,
 };
 use blockscout_service_launcher::{launcher, launcher::LaunchSettings, tracing};
-use brindexer_logic::IndexerRuntime;
+use brindexer_logic::{IndexerRuntime, RpcClient};
 use sea_orm::{ConnectOptions, Database};
 
 use std::sync::Arc;
@@ -37,10 +37,11 @@ pub async fn run(settings: Settings) -> Result<(), anyhow::Error> {
     let create_database_options = ConnectOptions::new(settings.database.connect.url())
         .sqlx_logging(false)
         .to_owned();
-    let db = Database::connect(create_database_options).await?;
-    let db = Arc::new(db);
+    let db = Arc::new(Database::connect(create_database_options).await?);
 
-    let mut indexer_runtime = IndexerRuntime::init(db.clone()).await?;
+    let rpc = Arc::new(RpcClient::from_url(settings.rpc.url.parse().unwrap()));
+
+    let mut indexer_runtime = IndexerRuntime::init(db.clone(), rpc.clone()).await?;
     indexer_runtime.add_all_jobs().await?;
     indexer_runtime.run_background().await?;
 
