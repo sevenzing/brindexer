@@ -29,7 +29,7 @@ alloy-rpc-types = { workspace = true }
 hex = { workspace = true }
 serde = { workspace = true }
 enum_dispatch = { workspace = true }
-
+cached = { workspace = true }
 
 [dev-dependencies]
 blockscout-service-launcher = { workspace = true, features = [ 

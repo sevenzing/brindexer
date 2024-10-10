@@ -53,3 +53,4 @@ alloy-rpc-types = "0.4.2"
 hex = "0.4.3"
 enum_dispatch = "0.3.0"
 rstest = "0.23.0"
+cached = {version = "0.53", features = ["proc_macro", "tokio", "async", "async_tokio_rt_multi_thread"]}
