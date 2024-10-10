@@ -11,6 +11,11 @@ pub async fn fetch_uncataloged_tokens<C: ConnectionTrait>(
                 .eq(true)
                 .not(),
         )
+        .filter(
+            blockscout_db::entity::tokens::Column::SkipMetadata
+                .eq(true)
+                .not(),
+        )
         .limit(limit)
         .all(db)
         .await?;

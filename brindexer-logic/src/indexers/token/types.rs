@@ -56,7 +56,7 @@ impl TokenData {
     async fn process_contract_uri(&self) -> Option<ContractURIData> {
         let contract_uri = self.contract_uri.as_deref()?;
 
-        if let Some(contract_uri) = Url::parse(contract_uri).ok() {
+        if let Ok(contract_uri) = Url::parse(contract_uri) {
             reqwest::get(contract_uri).await.ok()?.json().await.ok()
         } else {
             serde_json::from_str(contract_uri).ok()
