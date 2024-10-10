@@ -42,7 +42,7 @@ pub async fn run(settings: Settings) -> Result<(), anyhow::Error> {
     let rpc = Arc::new(RpcClient::from_url(settings.rpc.url.parse().unwrap()));
 
     let mut indexer_runtime = IndexerRuntime::init(db.clone(), rpc.clone()).await?;
-    indexer_runtime.add_all_jobs().await?;
+    indexer_runtime.add_all_jobs(&settings.indexers).await?;
     indexer_runtime.run_background().await?;
 
     let router = Router { health };

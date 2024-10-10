@@ -1,5 +1,8 @@
 use super::{IndexerJob, IndexerJobContext};
-use crate::{indexers::token::TokenDataJob, rpc::RpcClient};
+use crate::{
+    indexers::{token::TokenDataJob, IndexersSettings},
+    rpc::RpcClient,
+};
 use derive_new::new;
 use sea_orm::DatabaseConnection;
 use std::sync::Arc;
@@ -63,8 +66,8 @@ impl IndexerRuntime {
         Ok(())
     }
 
-    pub async fn add_all_jobs(&self) -> Result<(), JobSchedulerError> {
-        let jobs = vec![Arc::new(TokenDataJob::new(50)) as Arc<dyn IndexerJob>];
+    pub async fn add_all_jobs(&self, settings: &IndexersSettings) -> Result<(), JobSchedulerError> {
+        let jobs = vec![Arc::new(TokenDataJob::new(settings.tokens.batch)) as Arc<dyn IndexerJob>];
         self.add_jobs(jobs).await
     }
 

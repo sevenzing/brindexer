@@ -3,6 +3,7 @@ use blockscout_service_launcher::{
     launcher::{ConfigSettings, MetricsSettings, ServerSettings},
     tracing::{JaegerSettings, TracingSettings},
 };
+use brindexer_logic::IndexersSettings;
 use serde::Deserialize;
 
 #[derive(Debug, Clone, Deserialize, PartialEq, Eq)]
@@ -18,6 +19,8 @@ pub struct Settings {
     pub jaeger: JaegerSettings,
     pub database: DatabaseSettings,
     pub rpc: RpcSettings,
+    #[serde(default)]
+    pub indexers: IndexersSettings,
 }
 
 impl ConfigSettings for Settings {
