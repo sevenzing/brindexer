@@ -30,13 +30,13 @@ hex = { workspace = true }
 serde = { workspace = true }
 enum_dispatch = { workspace = true }
 cached = { workspace = true }
+reqwest = { workspace = true }
 
 [dev-dependencies]
-blockscout-service-launcher = { workspace = true, features = [ 
-    "test-database", "database-1_0"
-    
+blockscout-service-launcher = { workspace = true, features = [
+    "test-database",
+    "database-1_0",
+
 ] }
 pretty_assertions = { workspace = true }
 rstest = { workspace = true }
-
-
