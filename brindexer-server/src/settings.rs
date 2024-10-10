@@ -1,5 +1,5 @@
 use blockscout_service_launcher::{
-    database::{DatabaseConnectSettings, DatabaseSettings},
+    database::DatabaseSettings,
     launcher::{ConfigSettings, MetricsSettings, ServerSettings},
     tracing::{JaegerSettings, TracingSettings},
 };

@@ -22,7 +22,7 @@ async-trait = "0.1.83"
 thiserror = "1.0.64"
 derive-new = "0.7.0"
 tokio = "1.40.0"
-blockscout-db = { git = "https://github.com/blockscout/blockscout-rs", branch = "main" }
+blockscout-db = { git = "https://github.com/blockscout/blockscout-rs", branch = "ll/blockscout-db-big-decimal" }
 pretty_assertions = "1.3"
 
 actix-web = "4"
