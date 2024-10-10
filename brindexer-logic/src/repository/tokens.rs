@@ -1,5 +1,5 @@
 use blockscout_db::entity::tokens::Model as Token;
-use sea_orm::{prelude::*, QuerySelect};
+use sea_orm::{prelude::*, Condition, QuerySelect};
 
 pub async fn fetch_uncataloged_tokens<C: ConnectionTrait>(
     db: &C,
@@ -7,14 +7,14 @@ pub async fn fetch_uncataloged_tokens<C: ConnectionTrait>(
 ) -> Result<Vec<Token>, DbErr> {
     let tokens = blockscout_db::entity::tokens::Entity::find()
         .filter(
-            blockscout_db::entity::tokens::Column::Cataloged
-                .eq(true)
-                .not(),
+            Condition::any()
+                .add(blockscout_db::entity::tokens::Column::Cataloged.eq(false))
+                .add(blockscout_db::entity::tokens::Column::Cataloged.is_null()),
         )
         .filter(
-            blockscout_db::entity::tokens::Column::SkipMetadata
-                .eq(true)
-                .not(),
+            Condition::any()
+                .add(blockscout_db::entity::tokens::Column::SkipMetadata.eq(false))
+                .add(blockscout_db::entity::tokens::Column::SkipMetadata.is_null()),
         )
         .limit(limit)
         .all(db)
