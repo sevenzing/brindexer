@@ -67,7 +67,10 @@ impl IndexerRuntime {
     }
 
     pub async fn add_all_jobs(&self, settings: &IndexersSettings) -> Result<(), JobSchedulerError> {
-        let jobs = vec![Arc::new(TokenDataJob::new(settings.tokens.batch)) as Arc<dyn IndexerJob>];
+        let jobs = vec![Arc::new(TokenDataJob::new(
+            settings.tokens.batch,
+            settings.tokens.schedule.clone(),
+        )) as Arc<dyn IndexerJob>];
         self.add_jobs(jobs).await
     }
 

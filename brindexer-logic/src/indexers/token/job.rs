@@ -9,16 +9,17 @@ use tracing::instrument;
 #[derive(Debug, Clone, new)]
 pub struct TokenDataJob {
     batch_size: u64,
+    schedule: String,
 }
 
 #[async_trait::async_trait]
 impl IndexerJob for TokenDataJob {
-    fn name(&self) -> &'static str {
-        "token_data_job"
+    fn name(&self) -> String {
+        "token_data_job".to_string()
     }
 
-    fn schedule(&self) -> &'static str {
-        "every 5 seconds"
+    fn schedule(&self) -> String {
+        self.schedule.clone()
     }
 
     #[instrument(

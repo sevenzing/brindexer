@@ -13,9 +13,9 @@ pub trait IndexerJob: Send + Sync {
     fn retry_interval(&self) -> Duration {
         Duration::from_secs(5)
     }
-    fn name(&self) -> &'static str;
-    fn schedule(&self) -> &'static str {
-        "every 10 seconds"
+    fn name(&self) -> String;
+    fn schedule(&self) -> String {
+        "every 10 seconds".to_string()
     }
     async fn execute(&self, ctx: &IndexerJobContext) -> Result<(), IndexerJobError>;
 }

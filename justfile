@@ -8,6 +8,8 @@ db-password := env_var_or_default('DB_PASSWORD', "admin")
 db-name := env_var_or_default('DB_NAME', "brindexer")
 export DATABASE_URL := "postgres://" + db-user + ":" + db-password + "@" + db-host + ":" + db-port + "/" + db-name
 
+
+
 docker-name := env_var_or_default('DOCKER_NAME', "brindexer-postgres")
 test-db-port := env_var_or_default('TEST_DB_PORT', "9433")
 
@@ -35,6 +37,9 @@ stop-test-postgres:
 run:
     BRINDEXER__DATABASE__CONNECT__URL={{DATABASE_URL}} \
     cargo run --bin server
+
+env-run:
+    dotenv -e .env -e .env.example -- just run
 
 init-pg:
     cargo run --bin initialize_pg

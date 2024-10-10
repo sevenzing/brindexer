@@ -12,8 +12,14 @@ pub struct IndexersSettings {
 pub struct TokenIndexerSettings {
     #[serde(default = "default_batch_size")]
     pub batch: u64,
+    #[serde(default = "default_schedule")]
+    pub schedule: String,
 }
 
 fn default_batch_size() -> u64 {
     50
+}
+
+fn default_schedule() -> String {
+    "every 5 seconds".to_string()
 }
